@@ -10,7 +10,7 @@ Il faut garantir le cycle : détection, synchronisation avec le convoyeur, choix
 
 Deux points sont contraignants dans ce projet
 1. La cadence à 30 pièces/minute
-	    Cela signifie que le cycle du robot doit prendre moins de 2 secondes
+	    Cela signifie que **le cycle du robot doit prendre moins de 2 secondes**
 2. La précision à ±0.1 mm.
 	    Cette précision est relativement élevée pour une tâche de tri.
 
@@ -49,7 +49,7 @@ Chacun de ces points sera traité dans la partie suivante.
 
 ## Architecture et logique robotique
 
-Afin de limiter les risques identifiés précédemment et de proposer une solution robuste, simple et maintenable, je proposerais une architecture robotique basée sur un **robot collaboratif 4 axes**.
+Afin de limiter les risques identifiés précédemment et de proposer une solution robuste, simple et maintenable, je proposerais une architecture robotique basée sur un **robot collaboratif 4 axes** type robot SCARA.
 
 L’objectif n’est pas de choisir automatiquement l’architecture la plus flexible, mais plutôt **la cinématique minimale répondant au besoin client**. Dans ce cas, le robot doit principalement être capable de :
 - se positionner dans le plan du convoyeur : X, Y ;
