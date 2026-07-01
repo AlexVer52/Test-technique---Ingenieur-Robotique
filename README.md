@@ -22,41 +22,43 @@ Si l'orientation de la pièce n'a pas besoin d'être contrôlée au dépôt, une
 
 Suite à la précédente partie, je demanderais des clarifications sur 2 points.
 
-1. Les pièces à manipuler:
+1. **Les pièces à manipuler**:
 	    Pour designer un robot collaboratif performant et optimal, il faudrait les caractéristiques des pièces. 
 	    Leurs dimensions, leurs masses, leurs formes, s'il y a une surface plane (qui pourrait justifier l'utilisation d'une ventouse) et si les pièces sont semblables entre elles.
 	    Il serait également bien de savoir si les pièces sont fragiles ou déformables?
 
-2. Le convoyeur:
-	    Les pièces vont être en mouvement sur le convoyeur et donc il est nécessaire de connaître ses caractéristiques. Sa vitesse, si cette dernière est constante, s'il y a un encodeur ou s'il est possible d'en rajouter un. 
+2. **Le convoyeur**:
+	    Les pièces vont être en mouvement sur le convoyeur et donc il est nécessaire de connaître ses caractéristiques. Sa vitesse, si cette dernière est constante, s'il y a un **encodeur** ou s'il est possible d'en rajouter un. 
 	    Nous savons déjà que le convoyeur tourne en continu et assumerons donc qu'il est impossible de l'arrêter pour prévoir une zone de prise dédiée.
 	    La présence d'un encodeur me paraît nécessaire car même si le convoyeur a une vitesse constante, des variations de vitesse, des micro-arrêts ou des écarts de synchronisation vision-robot peuvent perturber les mesures.
 	    Il faudrait aussi connaître les dimensions du convoyeur afin de designer la cinématique du robot.
 
-Je challengerais la précision demandée car elle me paraît importante pour une tâche comme celle-là. Je voudrais demander ce qu'ils veulent dire par ±0.1 mm.
+Je challengerais **la précision** demandée car elle me paraît importante pour une tâche comme celle-là. Je voudrais demander ce qu'ils veulent dire par ±0.1 mm.
 Il serait bon de clarifier si cette précision concerne :
     la position de dépôt,
     la position de préhension,
     la répétabilité robot,
     ou un autre critère
 
-Le dernier point qui me semble important de mettre en évidence est la durée disponible d'installation. Il faudra préparer au maximum l'installation en amont et pas uniquement en simulation pour permettre une intégration fluide.
+Le dernier point qui me semble important de mettre en évidence est la **durée disponible d'installation**. Il faudra préparer au maximum l'installation en amont et pas uniquement en simulation pour permettre une intégration fluide.
 
 ## Les risques techniques
 
-Je vois 4 risques principaux, qui sont: la cadence demandée, la prise sur convoyeur en mouvement, les pièces désorganisées sur le convoyeur ainsi que leur orientation et la demande de robustesse et de coût du robot. 
+Je vois 4 risques principaux, qui sont: **la cadence demandée, la prise sur convoyeur en mouvement, les pièces désorganisées sur le convoyeur ainsi que leur orientation et la demande de robustesse et de coût du robot**. 
 Chacun de ces points sera traité dans la partie suivante.
 
 ## Architecture et logique robotique
 
-Afin de limiter les risques identifiés précédemment et de proposer une solution robuste, simple et maintenable, je proposerais une architecture robotique basée sur un robot collaboratif 4 axes.
+Afin de limiter les risques identifiés précédemment et de proposer une solution robuste, simple et maintenable, je proposerais une architecture robotique basée sur un **robot collaboratif 4 axes**.
 
-L’objectif n’est pas de choisir automatiquement l’architecture la plus flexible, mais plutôt la cinématique minimale répondant au besoin client. Dans ce cas, le robot doit principalement être capable de :
+L’objectif n’est pas de choisir automatiquement l’architecture la plus flexible, mais plutôt **la cinématique minimale répondant au besoin client**. Dans ce cas, le robot doit principalement être capable de :
 - se positionner dans le plan du convoyeur : X, Y ;
 - descendre et remonter pour saisir la pièce : Z ;
 - orienter le préhenseur selon l’angle de la pièce : Rz.
 
-Une architecture 4 axes de type X, Y, Z, Rz semble donc adaptée si les pièces restent globalement à plat sur le convoyeur. Elle permet de limiter la complexité mécanique, le coût et la maintenance, tout en assurant une bonne capacité de prise pour une opération répétitive de tri. Vous pouvez voir l'architecture dans le fichier Architecture.pdf.
+Une architecture 4 axes de type X, Y, Z, Rz semble donc adaptée si les pièces restent globalement à plat sur le convoyeur. Elle permet de limiter la complexité mécanique, le coût et la maintenance, tout en assurant une bonne capacité de prise pour une opération répétitive de tri. 
+
+Vous pouvez voir l'architecture dans le fichier **Architecture.pdf**.
 
 ### Choix du préhenseur
 
@@ -64,9 +66,9 @@ Le choix du préhenseur dépendra des caractéristiques réelles des pièces : g
 
 Deux options principales peuvent être envisagées.
 
-La première option est une ventouse. Elle serait pertinente si les pièces possèdent une surface suffisamment plane, large et accessible. Cette solution présente l’avantage d’être simple à commander, rapide à activer et généralement facile à maintenir.
+La première option est **une ventouse**. Elle serait pertinente si les pièces possèdent une surface suffisamment plane, large et accessible. Cette solution présente l’avantage d’être simple à commander, rapide à activer et généralement facile à maintenir.
 
-La deuxième option est une pince parallèle. Elle peut offrir davantage de flexibilité si les pièces ne permettent pas une prise fiable par ventouse. En revanche, elle ajoute de la complexité : alignement plus précis avec la pièce, gestion de l’ouverture, force de serrage, risque de collision avec des pièces proches.
+La deuxième option est **une pince parallèle**. Elle peut offrir davantage de flexibilité si les pièces ne permettent pas une prise fiable par ventouse. En revanche, elle ajoute de la complexité : alignement plus précis avec la pièce, gestion de l’ouverture, force de serrage, risque de collision avec des pièces proches.
 
 Dans une logique de simplicité, je privilégierais d’abord la ventouse si les essais sur pièces réelles confirment une prise fiable. Sinon, une pince parallèle ou un préhenseur plus spécifique devra être étudié.
 
@@ -82,7 +84,7 @@ Ce point doit donc être clarifié avant de valider définitivement l’architec
 
 ### Réduction du risque de mauvaise prise
 
-Avant de complexifier le robot, je privilégierais des solutions simples permettant de fiabiliser la prise :
+**Avant de complexifier le robot**, je privilégierais des solutions simples permettant de fiabiliser la prise :
 
 - refuser les pièces trop proches, trop inclinées ou partiellement visibles ;
 - demander à la vision un indicateur “pièce saisissable / non saisissable” ;
@@ -98,10 +100,10 @@ Si les essais montrent malgré tout que les pièces sont régulièrement inclin�
 
 Pour fiabiliser la cellule, j’ajouterais les éléments suivants :
 
-- un éclairage stable et contrôlé pour garantir une vision répétable ;
-- un capteur de vide ou de présence sur le préhenseur pour confirmer la prise ;
-- un encodeur convoyeur pour suivre précisément l’avancement des pièces ;
-- une interface opérateur simple pour afficher l’état de la cellule, les compteurs, les erreurs et les commandes de marche/arrêt.
+- **un éclairage stable** et contrôlé pour garantir une vision répétable ;
+- **un capteur de vide ou de présence** sur le préhenseur pour confirmer la prise ;
+- **un encodeur convoyeur** pour suivre précisément l’avancement des pièces ;
+- **une interface opérateur** simple pour afficher l’état de la cellule, les compteurs, les erreurs et les commandes de marche/arrêt.
 
 ### Gestion des pièces détectées
 
@@ -142,19 +144,19 @@ Du côté vision, la caméra sera située au-dessus du convoyeur avec une rate r
 	- Eventuellment un indicateur si la pièce est siasissable ou non
 
 ## Logique du robot
-La logique robot est relativement simple avec une chaîne d'état: Initialization, part_detection, track_part, pick, drop, et return. Pour avoir plus d'informations sur cette partie, le fichier logique_robotique.py contient un pseudo-code décrivant les étapes.
+La logique robot est relativement simple avec une chaîne d'état: Initialization, part_detection, track_part, pick, drop, et return. Pour avoir plus d'informations sur cette partie, le fichier **logique_robotique.py** contient un pseudo-code décrivant les étapes.
 
 ## Gestion des erreurs
 
 Une partie importante du développement d'un système robotique est la gestion des erreurs comme les pièces non détectées, les pièces non saisissables ou les échecs de prise ou de pose.
 
-En cas d'échec de prise, je développerais une solution simple. Ne pas tenter de rattraper la pièce et compter un défaut. La même logique s'applique si il y a un drop avant le bac. Une erreur peut être envoyée à l'interface opérateur avec une description de l'erreur (mauvais drop, pièce non saisissable,...).
+En cas d'échec de prise, je développerais une solution simple. **Ne pas tenter de rattraper la pièce et compter un défaut**. La même logique s'applique si il y a un drop avant le bac. Une erreur peut être envoyée à l'interface opérateur avec une description de l'erreur (mauvais drop, pièce non saisissable,...).
 
 
 ## Validation avant mise en service
 
-La première étape de validation est une simulation du robot et de son environnement avec une implémentation de la logique contrôle, pour cela il faut les différentes informations demandées plus haut (vitesse du convoyeur, taille et forme des pièces,...). 
-Après vérification que la logique en simulation fonctionne, il faudra tester en environnement réel avec un prototype car les deux jours d'installation me paraissent courts pour une validation complète.
+La première étape de validation est une **simulation du robot et de son environnement** avec une implémentation de la logique contrôle, pour cela il faut les différentes informations demandées plus haut (vitesse du convoyeur, taille et forme des pièces,...). 
+Après vérification que la logique en simulation fonctionne, il faudra **tester en environnement réel** avec un prototype car les deux jours d'installation me paraissent courts pour une validation complète.
 	    - Test de saisie sur pièces réelles (simples, inclinées, proches d'une autre pièce)
 	    - Test du cycle sur cadence attendue
 	    - Test de communication vision-robot
